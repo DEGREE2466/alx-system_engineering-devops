@@ -1,2 +1,2 @@
 #/bin/bash
- cat tc\
+ cat /etc/passwd
