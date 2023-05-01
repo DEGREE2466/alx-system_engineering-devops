@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# This script should display the phrase "Best School" 10 times
+#a bash script that displays best school 10 times
 
-for _ in {1..10}
-do 
-  echo "Best School"
+for ((x = 1; x <= 10; x++))
+do
+    echo "Best School"
 done
