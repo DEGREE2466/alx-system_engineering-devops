@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# Get the list of listening sockets and associated processes with PID
+netstat -lnptu | awk '{print $4,$7}' | sed -e 's/.*://g' | sort -u | while read line; do
+    # Get the process name for each PID and print the output
+    pid=$(echo $line | awk '{print $2}')
+    name=$(ps -p $pid -o comm=)
+    echo "Port: $(echo $line | awk '{print $1}'), PID: $pid, Process Name: $name"
+done
+
