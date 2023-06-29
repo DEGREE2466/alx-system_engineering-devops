@@ -1,0 +1,13 @@
+onfigures the Nginx server to have a custom 404 page
+# which contains a string Ceci n'est pas une page
+sudo apt-get -y update
+sudo apt-get -y install nginx
+sudo ufw allow 'Nginx HTTP'
+echo "Hello World!" | sudo tee /var/www/html/index.html
+st="server_name _;\n\trewrite ^\/redirect_me https:\/\/www.blog.ehoneahobed.com permanent;"
+sudo sed -i "s/server_name _;/$st/" /etc/nginx/sites-enabled/default
+
+echo "Ceci n'est pas une page" | sudo tee /usr/share/nginx/html/404.html
+st="listen 80 default_server;\n\terror_page 404 \/404.html;\n\tlocation = \/404.html {\n\t\troot \/var\/www\/html;\n\t\tinternal;\n\t}"
+sudo sed -i "s/listen 80 default_server;/$st/" /etc/nginx/sites-enabled/default
+sudo service nginx restart
