@@ -1,4 +1,5 @@
-onfigures the Nginx server to have a custom 404 page
+#!/usr/bin/env bash
+# File that configures the Nginx server to have a custom 404 page
 # which contains a string Ceci n'est pas une page
 sudo apt-get -y update
 sudo apt-get -y install nginx
