@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# Script must run the whoami command under the root user
+# passed as an argument
+
+sudo -u "$1" whoami
