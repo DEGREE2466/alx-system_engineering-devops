@@ -1,30 +1,37 @@
 #!/usr/bin/python3
-""" A Python script to export data in the JSON format."""
+"""
+Extending the previous task 0 to export to csv
+"""
 import json
+import re
 import requests
 import sys
 
+# defining the API url
+API = "https://jsonplaceholder.typicode.com"
 
-if __name__ == "__main__":
-    url = 'https://jsonplaceholder.typicode.com/'
 
-    userid = sys.argv[1]
-    user = '{}users/{}'.format(url, userid)
-    res = requests.get(user)
-    json_o = res.json()
-    name = json_o.get('username')
+def main():
+    """showing how many tasks is done by each user
+    User id will be passed as an argument"""
+    if len(sys.argv) > 1:
+        id = int(sys.argv[1])
+        if re.fullmatch(r"\d+", sys.argv[1]):
+            # getting responses
+            emp_res = requests.get('{}/users/{}'.format(API, id)).json()
+            emp_username = emp_res['username']
+            emp_todos = requests.get(
+                '{}/users/{}/todos'.format(API, id)).json()
+            with open('{}.json'.format(id), 'w') as jsonfile:
+                user_data = [{
+                    "task": todo.get('title'),
+                    "completed": todo.get('completed'),
+                    "username": emp_username
+                } for todo in emp_todos]
 
-    todos = '{}todos?userId={}'.format(url, userid)
-    res = requests.get(todos)
-    tasks = res.json()
-    l_task = []
-    for task in tasks:
-        dict_task = {"task": task.get('title'),
-                     "completed": task.get('completed'),
-                     "username": name}
-        l_task.append(dict_task)
+                user_json = {'{}'.format(id): user_data}
+                json.dump(user_json, jsonfile)
 
-    d_task = {str(userid): l_task}
-    filename = '{}.json'.format(userid)
-    with open(filename, mode='w') as f:
-        json.dump(d_task, f)
+
+if __name__ == '__main__':
+    main()
