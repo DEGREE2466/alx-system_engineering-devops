@@ -1,20 +1,20 @@
 #!/usr/bin/python3
-import requests as r
+"""Displays the total number of subscribers for a subreddit
+Dependency:
+    -> Reddit API (https://www.reddit.com/r/{subreddit}/{listing}.json
+"""
+import requests
 
 
 def top_ten(subreddit):
-    """
-    queries the Reddit API and prints the titles of the first 10 hot posts
-    """
-    headers = {"User-Agent": "Frocuts"}
-    endpoint = "http://reddit.com/r/{}/hot.json?limit=10"
-    subs = r.get(endpoint.format(subreddit), headers=headers)
-    if subs.status_code != 200:
+    """Returns number of subreddit subscribers."""
+    url = "https://www.reddit.com/r/{}/hot.json?limit=10".format(subreddit)
+    res = requests.get(url, headers={'User-Agent': 'custom'},
+                       allow_redirects=False)
+    if res.status_code == 404:
         print(None)
-        return 0
-    subs = subs.json()
-    if subs["kind"] == "Listing":
-        for data in subs["data"]["children"]:
-            print(data["data"]["title"])
     else:
-        print(None)
+        posts = res.json().get('data').get('children')
+        for post in posts:
+            title = post.get('data').get('title')
+            print(title)
